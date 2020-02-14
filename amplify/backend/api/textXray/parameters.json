@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "textXray",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authreactrxayinstrub7ae6b07",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
