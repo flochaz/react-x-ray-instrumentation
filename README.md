@@ -1,6 +1,6 @@
 # React App + AWS Amplify + XRay
 
-This app is a simple port of [https://docs.aws.amazon.com/xray/latest/devguide/scorekeep-client.html](Instrumenting a Web App Client) aws doc in a React App and use it to trace a AWS Amplify API graphql call to  AWS AppSync (which now support X-Ray !!! [https://aws.amazon.com/about-aws/whats-new/2020/02/aws-appsync-releases-integration-with-aws-x-ray-and-graphql-info-object-support/](details) )
+This app is a simple port of [Instrumenting a Web App Client](https://docs.aws.amazon.com/xray/latest/devguide/scorekeep-client.html) aws doc in a React App and use it to trace a AWS Amplify API graphql call to  AWS AppSync (which now support X-Ray !!! [details](https://aws.amazon.com/about-aws/whats-new/2020/02/aws-appsync-releases-integration-with-aws-x-ray-and-graphql-info-object-support/) )
 
 # Dev details
 
