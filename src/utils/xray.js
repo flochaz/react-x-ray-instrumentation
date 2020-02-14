@@ -1,5 +1,6 @@
 import * as XRay from "aws-sdk/clients/xray";
 import { Auth } from 'aws-amplify';
+import awsconfig from '../aws-exports';
 const crypto = window.crypto;
 
 function getHexId(length) {
@@ -47,9 +48,41 @@ export async function beginSegment() {
 
   let documents = [];
   documents[0] = JSON.stringify(segment);
-  putDocuments(documents);
+  putDocuments(documents).catch((error) => console.log(`Error putting segment begin. hopefully end Segment will succeed: ${error}`));
   return segment;
 }
+
+export async function beginSubsegment(segment, name, namespace) {
+
+    let subsegment = {
+        type: "subsegment",
+        trace_id: segment.trace_id,
+        parent_id: segment.id,
+        id: getHexId(16),
+        name: name,
+        start_time: getEpochTime(),
+        namespace: namespace,
+        http: {
+            request: {
+              url: window.location.href
+            }
+        }
+    };
+  
+    let documents = [];
+    documents[0] = JSON.stringify(subsegment);
+    putDocuments(documents).catch((error) => console.log(`Error putting segment begin. hopefully end Segment will succeed: ${error}`));
+    return subsegment;
+  }
+
+  export function endSubsegment(subsegment) {
+    let endTime = getEpochTime();
+    subsegment.end_time = endTime;
+    subsegment.in_progress = false;
+    let documents = [];
+    documents[0] = JSON.stringify(subsegment);
+    putDocuments(documents);
+  }
 
 export function endSegment(segment) {
   let endTime = getEpochTime();
@@ -63,7 +96,7 @@ export function endSegment(segment) {
 async function putDocuments(documents) {
   let credentials = await Auth.currentCredentials();
   let xray = new XRay({
-      region: 'us-west-2',
+      region: awsconfig.aws_cognito_region,
       credentials: credentials,
   });
   let params = {

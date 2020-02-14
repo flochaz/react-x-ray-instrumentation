@@ -15,18 +15,21 @@ class App extends React.Component {
   async componentDidMount() {
 
   let segment = await XRayHandler.beginSegment();
+  let subsegment = await XRayHandler.beginSubsegment(segment, 'listTodos');
   
   Amplify.configure({
     API: {
       graphql_headers: async () => ({
-        'X-Amzn-Trace-Id': XRayHandler.getTraceHeader(segment)
+        'X-Amzn-Trace-Id': XRayHandler.getTraceHeader(subsegment)
       })
     }
   });
 
   await API.graphql(graphqlOperation(listTodos));
 
+  XRayHandler.endSubsegment(subsegment);
   XRayHandler.endSegment(segment);
+  console.log(window.performance.getEntriesByName("https://uv4up2dwcfdnbgxx2iqcew5fdu.appsync-api.us-west-2.amazonaws.com/graphql"));
   }
 
   render () {
